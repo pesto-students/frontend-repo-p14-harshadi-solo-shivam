@@ -12,6 +12,7 @@ const BookingModal = ({ opened, setOpened, email, propertyId }) => {
     userDetails: { token },
     setUserDetails,
   } = useContext(UserDetailContext);
+  console.log("aaa",token);
 
   const handleBookingSuccess = () => {
     toast.success("You have booked your visit", {
@@ -34,7 +35,9 @@ const BookingModal = ({ opened, setOpened, email, propertyId }) => {
     onSuccess: () => handleBookingSuccess(),
     onError: ({ response }) => toast.error(response.data.message),
     onSettled: () => setOpened(false),
+
   });
+  console.log(token);
 
   return (
     <Modal
@@ -43,7 +46,7 @@ const BookingModal = ({ opened, setOpened, email, propertyId }) => {
       title="Select your date of visit"
       centered
     >
-      <div className="flexColCenter" style={{gap: "1rem"}}>
+      <div className="flexColCenter" style={{ gap: "1rem" }}>
         <DatePicker value={value} onChange={setValue} minDate={new Date()} />
         <Button disabled={!value || isLoading} onClick={() => mutate()}>
           Book visit

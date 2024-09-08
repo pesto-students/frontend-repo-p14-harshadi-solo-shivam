@@ -1,14 +1,13 @@
-import axios from "axios";
-import dayjs from "dayjs";
-import { toast } from "react-toastify";
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
 
 export const api = axios.create({
-  baseURL: "https://full-stack-real-estate-youtube.vercel.app/api",
-});
-
+    baseURL: "http://localhost:8000/api",
+})
 export const getAllProperties = async () => {
   try {
-    const response = await api.get("/residency/allresd", {
+    const response = await api.get("/residency/allresidencies", {
       timeout: 10 * 1000,
     });
 
@@ -40,8 +39,7 @@ export const getProperty = async (id) => {
 
 export const createUser = async (email, token) => {
   try {
-    await api.post(
-      `/user/register`,
+    await api.post(`/user/register`,
       { email },
       {
         headers: {
@@ -57,8 +55,7 @@ export const createUser = async (email, token) => {
 
 export const bookVisit = async (date, propertyId, email, token) => {
   try {
-    await api.post(
-      `/user/bookVisit/${propertyId}`,
+    await api.post(`/user/bookVisit/${propertyId}`,
       {
         email,
         id: propertyId,
@@ -78,8 +75,7 @@ export const bookVisit = async (date, propertyId, email, token) => {
 
 export const removeBooking = async (id, email, token) => {
   try {
-    await api.post(
-      `/user/removeBooking/${id}`,
+    await api.post(`/user/removeBooking/${id}`,
       {
         email,
       },
@@ -98,8 +94,7 @@ export const removeBooking = async (id, email, token) => {
 
 export const toFav = async (id, email, token) => {
   try {
-    await api.post(
-      `/user/toFav/${id}`,
+    await api.post(`/user/toFav/${id}`,
       {
         email,
       },
@@ -119,8 +114,7 @@ export const getAllFav = async (email, token) => {
   if(!token) return 
   try{
 
-    const res = await api.post(
-      `/user/allFav`,
+    const res = await api.post(`/user/allFav`,
       {
         email,
       },
@@ -145,8 +139,7 @@ export const getAllBookings = async (email, token) => {
   
   if(!token) return 
   try {
-    const res = await api.post(
-      `/user/allBookings`,
+    const res = await api.post(`/user/allBookings`,
       {
         email,
       },
@@ -169,8 +162,7 @@ export const getAllBookings = async (email, token) => {
 export const createResidency = async (data, token) => {
   console.log(data)
   try{
-    const res = await api.post(
-      `/residency/create`,
+    const res = await api.post(`/residency/create`,
       {
         data
       },

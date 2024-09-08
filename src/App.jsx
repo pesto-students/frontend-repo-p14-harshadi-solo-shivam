@@ -1,6 +1,7 @@
 import { Suspense, useState } from "react";
 import "./App.css";
 import Layout from "./components/Layout/Layout";
+import { MantineProvider } from '@mantine/core';
 
 import Website from "./pages/Website";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -14,6 +15,7 @@ import UserDetailContext from "./context/UserDetailContext";
 import Bookings from "./pages/Bookings/Bookings";
 import Favourites from "./pages/Favourites/Favourites";
 
+
 function App() {
   const queryClient = new QueryClient();
 
@@ -26,6 +28,7 @@ function App() {
   return (
     <UserDetailContext.Provider value={{ userDetails, setUserDetails }}>
       <QueryClientProvider client={queryClient}>
+        
         <BrowserRouter>
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>

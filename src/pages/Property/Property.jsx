@@ -1,35 +1,37 @@
 import React, { useContext, useState } from "react";
-import { useQuery } from '@tanstack/react-query';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import { getProperty, removeBooking } from "../../utils/api";
 import { PuffLoader } from "react-spinners";
-import { AiFillHeart, AiTwotoneCar } from "react-icons/ai";
+
+import "./Property.css";
+
 import { FaShower } from "react-icons/fa";
+import { AiTwotoneCar } from "react-icons/ai";
 import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
 import Map from "../../components/Map/Map";
 import useAuthCheck from "../../hooks/useAuthCheck";
 import { useAuth0 } from "@auth0/auth0-react";
 import BookingModal from "../../components/BookingModal/BookingModal";
-import UserDetailContext from "../../context/UserDetailsContext";
+import UserDetailContext from "../../context/UserDetailContext.js";
 import { Button } from "@mantine/core";
 import { toast } from "react-toastify";
 import Heart from "../../components/Heart/Heart";
-import "./Property.css";
-
 const Property = () => {
   const { pathname } = useLocation();
   const id = pathname.split("/").slice(-1)[0];
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['resd', id],
-    queryFn: () => getProperty(id),
-  });
+  const { data, isLoading, isError } = useQuery(["resd", id], () =>
+    getProperty(id)
+  );
 
   const [modalOpened, setModalOpened] = useState(false);
   const { validateLogin } = useAuthCheck();
   const { user } = useAuth0();
 
-  const { userDetails: { token, bookings }, setUserDetails } = useContext(UserDetailContext);
+  const {
+    userDetails: { token, bookings },
+    setUserDetails,
+  } = useContext(UserDetailContext);
 
   const { mutate: cancelBooking, isLoading: cancelling } = useMutation({
     mutationFn: () => removeBooking(id, user?.email, token),
@@ -38,6 +40,7 @@ const Property = () => {
         ...prev,
         bookings: prev.bookings.filter((booking) => booking?.id !== id),
       }));
+
       toast.success("Booking cancelled", { position: "bottom-right" });
     },
   });
@@ -67,11 +70,11 @@ const Property = () => {
       <div className="flexColStart paddings innerWidth property-container">
         {/* like button */}
         <div className="like">
-          <Heart id={id} />
+          <Heart id={id}/>
         </div>
 
         {/* image */}
-        <img src={data?.image} alt="home" />
+        <img src={data?.image} alt="home image" />
 
         <div className="flexCenter property-details">
           {/* left */}
@@ -95,26 +98,30 @@ const Property = () => {
               {/* parkings */}
               <div className="flexStart facility">
                 <AiTwotoneCar size={20} color="#1F3E72" />
-                <span>{data?.facilities?.parkings} Parking</span>
+                <span>{data?.facilities.parkings} Parking</span>
               </div>
 
               {/* rooms */}
               <div className="flexStart facility">
                 <MdMeetingRoom size={20} color="#1F3E72" />
-                <span>{data?.facilities?.bedrooms} Room/s</span>
+                <span>{data?.facilities.bedrooms} Room/s</span>
               </div>
             </div>
 
             {/* description */}
+
             <span className="secondaryText" style={{ textAlign: "justify" }}>
               {data?.description}
             </span>
 
             {/* address */}
+
             <div className="flexStart" style={{ gap: "1rem" }}>
               <MdLocationPin size={25} />
               <span className="secondaryText">
-                {data?.address} {data?.city} {data?.country}
+                {data?.address}{" "}
+                {data?.city}{" "}
+                {data?.country}
               </span>
             </div>
 
@@ -132,7 +139,7 @@ const Property = () => {
                 </Button>
                 <span>
                   Your visit already booked for date{" "}
-                  {bookings?.find((booking) => booking.id === id)?.date}
+                  {bookings?.filter((booking) => booking?.id === id)[0].date}
                 </span>
               </>
             ) : (
